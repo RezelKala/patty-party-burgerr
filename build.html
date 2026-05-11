@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patty Party Burger – Build Your Own</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* Mobile price bar pinned at bottom */
+.mobile-price-bar {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: white; border-top: 2px solid #e8d9b8;
+  padding: 0.75rem 1.2rem;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+  z-index: 900;
+  align-items: center; justify-content: space-between; gap: 1rem;
+}
+.mobile-price-bar .mp-total { font-size: 1.1rem; font-weight: 900; color: var(--red); }
+.mobile-price-bar .mp-label { font-size: 0.72rem; color: var(--gray); }
+.mobile-price-bar .btn-add-burger { width: auto; padding: 0.7rem 1.5rem; font-size: 0.9rem; }
+@media(max-width:1024px){
+  .mobile-price-bar { display: flex; }
+  .build-summary .btn-add-burger { display: none; }
+  body { padding-bottom: 80px; }
+}
+@media(max-width:480px){
+  .mobile-price-bar { padding: 0.6rem 1rem; }
+  .mobile-price-bar .mp-total { font-size: 1rem; }
+}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a class="nav-logo" href="index.html">
+      <div class="logo-icon">🍔</div>
+      <div><div class="logo-small">Patty Party</div><div class="logo-main">Patty Party Burger</div></div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="menu.html" class="nav-link">Menu</a></li>
+      <li><a href="build.html" class="nav-link active">Build Your Own Burger</a></li>
+      <li><a href="cart.html" class="nav-link">My Cart <span class="cart-badge">0</span></a></li>
+      <li><a href="about.html" class="nav-link">About</a></li>
+      <li><a href="review.html" class="nav-link">Review</a></li>
+      <li><a href="signin.html" class="nav-link btn-signin">Sign In</a></li>
+      <li><a href="signin.html#register" class="nav-link btn-register">Register</a></li>
+    </ul>
+    <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero" style="background:var(--red)">
+  <h1>🍔 Build Your Own Burger!</h1>
+  <p>Pilih bahan per bahan — harga otomatis menyesuaikan pilihanmu!</p>
+</div>
+
+<div class="build-container">
+  <div class="build-steps">
+
+    <!-- Step 1: Bread -->
+    <div class="build-step">
+      <div class="step-header"><span class="step-num">1</span><h3>Pilih Roti</h3></div>
+      <div class="build-options" id="step-bread">
+        <div class="build-option selected" onclick="selectOpt('bread',this)" data-name="Sesame Bun" data-price="8000">
+          <span class="opt-emoji">🍞</span><span class="opt-name">Sesame Bun</span><span class="opt-price">Rp 8.000</span>
+        </div>
+        <div class="build-option" onclick="selectOpt('bread',this)" data-name="Whole Wheat" data-price="9000">
+          <span class="opt-emoji">🌾</span><span class="opt-name">Whole Wheat</span><span class="opt-price">Rp 9.000</span>
+        </div>
+        <div class="build-option" onclick="selectOpt('bread',this)" data-name="Brioche" data-price="12000">
+          <span class="opt-emoji">🥖</span><span class="opt-name">Brioche</span><span class="opt-price">Rp 12.000</span>
+        </div>
+        <div class="build-option" onclick="selectOpt('bread',this)" data-name="Pretzel Bun" data-price="11000">
+          <span class="opt-emoji">🥨</span><span class="opt-name">Pretzel Bun</span><span class="opt-price">Rp 11.000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Patty -->
+    <div class="build-step">
+      <div class="step-header"><span class="step-num">2</span><h3>Pilih Patty</h3></div>
+      <div class="build-options" id="step-patty">
+        <div class="build-option selected" onclick="selectOpt('patty',this)" data-name="Beef Patty" data-price="28000">
+          <span class="opt-emoji">🥩</span><span class="opt-name">Beef Patty</span><span class="opt-price">Rp 28.000</span>
+        </div>
+        <div class="build-option" onclick="selectOpt('patty',this)" data-name="Chicken Patty" data-price="24000">
+          <span class="opt-emoji">🍗</span><span class="opt-name">Chicken Patty</span><span class="opt-price">Rp 24.000</span>
+        </div>
+        <div class="build-option" onclick="selectOpt('patty',this)" data-name="Fish Patty" data-price="22000">
+          <span class="opt-emoji">🐟</span><span class="opt-name">Fish Patty</span><span class="opt-price">Rp 22.000</span>
+        </div>
+        <div class="build-option" onclick="selectOpt('patty',this)" data-name="Veggie Patty" data-price="18000">
+          <span class="opt-emoji">🥦</span><span class="opt-name">Veggie Patty</span><span class="opt-price">Rp 18.000</span>
+        </div>
+        <div class="build-option" onclick="selectOpt('patty',this)" data-name="Double Beef" data-price="48000">
+          <span class="opt-emoji">🥩🥩</span><span class="opt-name">Double Beef</span><span class="opt-price">Rp 48.000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Toppings -->
+    <div class="build-step">
+      <div class="step-header"><span class="step-num">3</span><h3>Tambah Topping <small style="font-weight:400;color:var(--gray)">(Pilih beberapa)</small></h3></div>
+      <div class="build-options" id="step-toppings">
+        <div class="build-option" onclick="toggleTop(this)" data-name="Lettuce" data-price="2000"><span class="opt-emoji">🥬</span><span class="opt-name">Lettuce</span><span class="opt-price">+Rp 2.000</span></div>
+        <div class="build-option" onclick="toggleTop(this)" data-name="Tomato" data-price="2000"><span class="opt-emoji">🍅</span><span class="opt-name">Tomato</span><span class="opt-price">+Rp 2.000</span></div>
+        <div class="build-option" onclick="toggleTop(this)" data-name="Onion" data-price="1500"><span class="opt-emoji">🧅</span><span class="opt-name">Onion</span><span class="opt-price">+Rp 1.500</span></div>
+        <div class="build-option" onclick="toggleTop(this)" data-name="Pickles" data-price="1500"><span class="opt-emoji">🥒</span><span class="opt-name">Pickles</span><span class="opt-price">+Rp 1.500</span></div>
+        <div class="build-option" onclick="toggleTop(this)" data-name="Cheddar" data-price="5000"><span class="opt-emoji">🧀</span><span class="opt-name">Cheddar</span><span class="opt-price">+Rp 5.000</span></div>
+        <div class="build-option" onclick="toggleTop(this)" data-name="Swiss Cheese" data-price="6000"><span class="opt-emoji">🫕</span><span class="opt-name">Swiss Cheese</span><span class="opt-price">+Rp 6.000</span></div>
+        <div class="build-option" onclick="toggleTop(this)" data-name="Bacon" data-price="8000"><span class="opt-emoji">🥓</span><span class="opt-name">Bacon</span><span class="opt-price">+Rp 8.000</span></div>
+        <div class="build-option" onclick="toggleTop(this)" data-name="Avocado" data-price="7000"><span class="opt-emoji">🥑</span><span class="opt-name">Avocado</span><span class="opt-price">+Rp 7.000</span></div>
+        <div class="build-option" onclick="toggleTop(this)" data-name="Fried Egg" data-price="4000"><span class="opt-emoji">🍳</span><span class="opt-name">Fried Egg</span><span class="opt-price">+Rp 4.000</span></div>
+        <div class="build-option" onclick="toggleTop(this)" data-name="Jalapeño" data-price="3000"><span class="opt-emoji">🌶️</span><span class="opt-name">Jalapeño</span><span class="opt-price">+Rp 3.000</span></div>
+      </div>
+    </div>
+
+    <!-- Step 4: Sauce -->
+    <div class="build-step">
+      <div class="step-header"><span class="step-num">4</span><h3>Pilih Saus</h3></div>
+      <div class="build-options" id="step-sauce">
+        <div class="build-option selected" onclick="selectOpt('sauce',this)" data-name="Mayo" data-price="0"><span class="opt-emoji">🫙</span><span class="opt-name">Mayo</span><span class="opt-price">Gratis</span></div>
+        <div class="build-option" onclick="selectOpt('sauce',this)" data-name="Ketchup" data-price="0"><span class="opt-emoji">🍅</span><span class="opt-name">Ketchup</span><span class="opt-price">Gratis</span></div>
+        <div class="build-option" onclick="selectOpt('sauce',this)" data-name="BBQ" data-price="2000"><span class="opt-emoji">🔥</span><span class="opt-name">BBQ</span><span class="opt-price">+Rp 2.000</span></div>
+        <div class="build-option" onclick="selectOpt('sauce',this)" data-name="Mustard" data-price="0"><span class="opt-emoji">💛</span><span class="opt-name">Mustard</span><span class="opt-price">Gratis</span></div>
+        <div class="build-option" onclick="selectOpt('sauce',this)" data-name="Ranch" data-price="2000"><span class="opt-emoji">🌿</span><span class="opt-name">Ranch</span><span class="opt-price">+Rp 2.000</span></div>
+        <div class="build-option" onclick="selectOpt('sauce',this)" data-name="Garlic Mayo" data-price="2000"><span class="opt-emoji">🧄</span><span class="opt-name">Garlic Mayo</span><span class="opt-price">+Rp 2.000</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Summary Panel -->
+  <div class="build-summary">
+    <h3>Burger Kamu 🍔</h3>
+    <div class="summary-visual">🍔</div>
+    <div class="summary-details">
+      <div class="sum-row"><span>🍞 Roti</span><strong id="sum-bread">Sesame Bun</strong></div>
+      <div class="sum-row"><span>🥩 Patty</span><strong id="sum-patty">Beef Patty</strong></div>
+      <div class="sum-row"><span>🥗 Topping</span><strong id="sum-toppings">Belum dipilih</strong></div>
+      <div class="sum-row"><span>🫙 Saus</span><strong id="sum-sauce">Mayo</strong></div>
+    </div>
+    <div class="price-breakdown" id="priceBreakdown"></div>
+    <div class="summary-price-label">Total Harga:</div>
+    <div class="summary-price" id="sum-price">Rp 36.000</div>
+    <button class="btn-add-burger" onclick="addCustomBurger()">Tambah ke Keranjang 🛒</button>
+  </div>
+</div>
+
+<!-- Mobile price bar -->
+<div class="mobile-price-bar">
+  <div>
+    <div class="mp-label">Total Harga</div>
+    <div class="mp-total" id="mobileTotalPrice">Rp 36.000</div>
+  </div>
+  <button class="btn-add-burger" onclick="addCustomBurger()">Tambah ke Keranjang 🛒</button>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">🍔 Patty Party Burger</div>
+    <div class="footer-links"><a href="about.html">About Us</a><a href="menu.html">Menu</a><a href="contact.html">Contact</a></div>
+    <div class="footer-socials">
+      <a href="#" class="social-btn fb"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" class="social-btn ig"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="social-btn tw"><i class="fab fa-twitter"></i></a>
+    </div>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+// Read prices directly from data-price attributes — no separate PRICES object needed
+const choices = {
+  bread: { name: 'Sesame Bun', price: 8000 },
+  patty: { name: 'Beef Patty', price: 28000 },
+  sauce: { name: 'Mayo', price: 0 },
+  toppings: []
+};
+
+function selectOpt(type, el) {
+  el.parentElement.querySelectorAll('.build-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  choices[type] = {
+    name: el.dataset.name,
+    price: parseInt(el.dataset.price) || 0
+  };
+  updateSummary();
+}
+
+function toggleTop(el) {
+  el.classList.toggle('selected');
+  const name = el.dataset.name;
+  const price = parseInt(el.dataset.price) || 0;
+  if (el.classList.contains('selected')) {
+    choices.toppings.push({ name, price });
+  } else {
+    choices.toppings = choices.toppings.filter(t => t.name !== name);
+  }
+  updateSummary();
+}
+
+function calcTotal() {
+  let total = choices.bread.price + choices.patty.price + choices.sauce.price;
+  choices.toppings.forEach(t => { total += t.price; });
+  return total;
+}
+
+function fmt(n) { return 'Rp ' + n.toLocaleString('id-ID'); }
+
+function updateSummary() {
+  document.getElementById('sum-bread').textContent = choices.bread.name;
+  document.getElementById('sum-patty').textContent = choices.patty.name;
+  document.getElementById('sum-toppings').textContent = choices.toppings.length
+    ? choices.toppings.map(t => t.name).join(', ')
+    : 'Belum dipilih';
+  document.getElementById('sum-sauce').textContent = choices.sauce.name;
+
+  const total = calcTotal();
+  const fmtTotal = fmt(total);
+  document.getElementById('sum-price').textContent = fmtTotal;
+
+  // Update mobile bar
+  const mobileBar = document.getElementById('mobileTotalPrice');
+  if (mobileBar) mobileBar.textContent = fmtTotal;
+
+  // Breakdown
+  let html = `<div class="pb-row"><span>🍞 ${choices.bread.name}</span><span>${fmt(choices.bread.price)}</span></div>`;
+  html += `<div class="pb-row"><span>🥩 ${choices.patty.name}</span><span>${fmt(choices.patty.price)}</span></div>`;
+  choices.toppings.forEach(t => {
+    html += `<div class="pb-row"><span>➕ ${t.name}</span><span>${fmt(t.price)}</span></div>`;
+  });
+  html += `<div class="pb-row"><span>🫙 ${choices.sauce.name}</span><span>${choices.sauce.price > 0 ? fmt(choices.sauce.price) : 'Gratis'}</span></div>`;
+  html += `<hr style="border:none;border-top:1px solid #e8d9b8;margin:0.4rem 0">`;
+  html += `<div class="pb-row" style="font-weight:900;color:var(--red)"><span>Total</span><span>${fmtTotal}</span></div>`;
+  document.getElementById('priceBreakdown').innerHTML = html;
+}
+
+function addCustomBurger() {
+  const name = 'Custom ' + choices.patty.name + ' Burger';
+  const total = calcTotal();
+  const img = 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&q=80';
+  addToCart(name, total, img);
+  setTimeout(() => {
+    if (confirm('✅ ' + name + ' (' + fmt(total) + ') ditambahkan!\n\nPergi ke keranjang sekarang?')) {
+      location.href = 'cart.html';
+    }
+  }, 400);
+}
+
+updateSummary();
+</script>
+</body>
+</html>

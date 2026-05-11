@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patty Party Burger – Payment</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.pay-wrap { padding: 2rem 5%; max-width: 700px; margin: 0 auto; }
+.pay-header-bar { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; background: white; padding: 1rem 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+.pay-badge { padding: 0.3rem 0.8rem; border-radius: 6px; font-weight: 700; font-size: 0.78rem; color: white; }
+.pay-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.pay-tab { flex: 1; padding: 0.75rem 1rem; border: 2px solid #e0d0b0; background: white; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.82rem; transition: 0.2s; font-family: 'Nunito', sans-serif; min-width: 120px; text-align: center; }
+.pay-tab.active { border-color: var(--red); background: #fff5f5; color: var(--red); }
+.pay-tab:hover { border-color: var(--red); }
+.pay-panel { display: none; background: white; border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+.pay-panel.active { display: block; }
+.pay-panel h3 { font-weight: 800; margin-bottom: 1rem; }
+.bank-opts { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.bank-btn { padding: 0.5rem 1.2rem; border: 2px solid #e0d0b0; border-radius: 8px; background: white; font-weight: 700; cursor: pointer; transition: 0.2s; font-family: 'Nunito', sans-serif; font-size: 0.85rem; }
+.bank-btn.active { border-color: var(--red); background: var(--red); color: white; }
+.bank-btn:hover { border-color: var(--red); }
+.va-box { background: var(--cream); border-radius: 10px; padding: 1.2rem; margin-bottom: 1.2rem; border: 1px solid #e8d9b8; }
+.va-label { font-size: 0.78rem; color: var(--gray); font-weight: 600; text-transform: uppercase; margin-bottom: 0.4rem; }
+.va-num { font-family: monospace; font-size: clamp(1rem,2.5vw,1.4rem); font-weight: 900; color: var(--dark); margin-bottom: 0.3rem; letter-spacing: 2px; }
+.va-box small { font-size: 0.75rem; color: var(--gray); }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem; }
+.info-grid label { font-size: 0.78rem; color: var(--gray); font-weight: 600; display: block; margin-bottom: 0.3rem; }
+.pay-input { width: 100%; border: 1px solid #e0d0b0; border-radius: 8px; padding: 0.6rem 0.8rem; font-family: 'Nunito', sans-serif; font-size: 0.85rem; background: white; outline: none; box-sizing: border-box; }
+.pay-input:focus { border-color: var(--red); }
+.total-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-top: 1px solid #e0d0b0; padding-top: 1rem; margin-top: 0.5rem; }
+.total-row span { font-size: 0.85rem; color: var(--gray); }
+.total-row strong { font-size: 1.3rem; font-weight: 900; color: var(--dark); }
+.btn-paynow { background: var(--gold); color: white; border: none; padding: 0.7rem 1.8rem; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.9rem; transition: 0.2s; font-family: 'Nunito', sans-serif; }
+.btn-paynow:hover { background: #e09515; }
+.btn-paynow:disabled { background: #ccc; cursor: not-allowed; }
+.store-steps { background: var(--cream); border-radius: 10px; padding: 1rem; margin: 1rem 0; font-size: 0.85rem; line-height: 2; }
+.qr-box { text-align: center; padding: 2rem; background: var(--cream); border-radius: 10px; margin-bottom: 1rem; }
+.qr-icon { font-size: 5rem; margin-bottom: 0.5rem; }
+.qr-sub { font-size: 0.78rem; color: var(--gray); margin-top: 0.5rem; }
+.qr-how { background: var(--cream); border-radius: 10px; padding: 1rem; margin-bottom: 1rem; font-size: 0.85rem; }
+.qr-how ul { padding-left: 1.5rem; line-height: 2; }
+/* Order summary mini */
+.order-mini { background: var(--cream); border-radius: 10px; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid #e8d9b8; }
+.order-mini h4 { font-weight: 800; font-size: 0.85rem; margin-bottom: 0.6rem; }
+.order-mini-item { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.3rem; }
+/* Modal */
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 9999; }
+.modal-bg.show { display: flex; }
+.modal-card { background: white; border-radius: 16px; padding: 3rem 2rem; text-align: center; max-width: 380px; width: 90%; }
+.modal-card h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin: 1rem 0 0.5rem; }
+.modal-card p { color: var(--gray); margin-bottom: 1.5rem; font-size: 0.9rem; line-height: 1.6; }
+.order-id { background: var(--cream); border-radius: 8px; padding: 0.5rem 1rem; font-family: monospace; font-size: 0.85rem; margin-bottom: 1rem; }
+@media(max-width:600px){ .info-grid { grid-template-columns: 1fr; } .pay-tabs { flex-direction: column; } .pay-tab { min-width: unset; } }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a class="nav-logo" href="index.html">
+      <div class="logo-icon">🍔</div>
+      <div><div class="logo-small">Patty Party</div><div class="logo-main">Patty Party Burger</div></div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="menu.html" class="nav-link">Menu</a></li>
+      <li><a href="build.html" class="nav-link">Build Your Own Burger</a></li>
+      <li><a href="cart.html" class="nav-link">My Cart <span class="cart-badge">0</span></a></li>
+      <li><a href="about.html" class="nav-link">About</a></li>
+      <li><a href="review.html" class="nav-link">Review</a></li>
+      <li><a href="signin.html" class="nav-link btn-signin">Sign In</a></li>
+      <li><a href="signin.html#register" class="nav-link btn-register">Register</a></li>
+    </ul>
+    <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero" style="background:var(--red)">
+  <h1>💳 Payment</h1>
+  <p>Pilih metode pembayaran favoritmu</p>
+</div>
+
+<div class="pay-wrap">
+
+  <!-- Order Summary Mini -->
+  <div class="order-mini" id="orderMini">
+    <h4>📋 Ringkasan Pesanan</h4>
+    <div id="miniItems"></div>
+    <div style="border-top:1px solid #e8d9b8;margin-top:0.5rem;padding-top:0.5rem">
+      <div class="order-mini-item"><span>Subtotal</span><strong id="miniSub">Rp 0</strong></div>
+      <div class="order-mini-item"><span>Ongkir</span><span>Rp 10.000</span></div>
+      <div class="order-mini-item" style="font-weight:900;color:var(--red)"><span>Total</span><strong id="miniTotal">Rp 0</strong></div>
+    </div>
+  </div>
+
+  <div class="pay-header-bar">
+    <strong style="font-size:0.85rem">Metode Pembayaran:</strong>
+    <span class="pay-badge" style="background:#005f96">BCA</span>
+    <span class="pay-badge" style="background:#003087">BNI</span>
+    <span class="pay-badge" style="background:#0052a5">BRI</span>
+    <span class="pay-badge" style="background:#00b14f">GoPay</span>
+    <span class="pay-badge" style="background:#4c3fbb">OVO</span>
+    <span class="pay-badge" style="background:#0055ff">DANA</span>
+    <span class="pay-badge" style="background:#ee4d2d">ShopeePay</span>
+  </div>
+
+  <div class="pay-tabs">
+    <button class="pay-tab active" onclick="showPanel('bank',this)"><i class="fas fa-university"></i> Bank Transfer</button>
+    <button class="pay-tab" onclick="showPanel('ewallet',this)"><i class="fas fa-mobile-alt"></i> E-Wallet</button>
+    <button class="pay-tab" onclick="showPanel('store',this)"><i class="fas fa-store"></i> Minimarket</button>
+    <button class="pay-tab" onclick="showPanel('qr',this)"><i class="fas fa-qrcode"></i> QR Code</button>
+  </div>
+
+  <!-- Bank Transfer -->
+  <div class="pay-panel active" id="panel-bank">
+    <h3>Pilih Bank</h3>
+    <div class="bank-opts">
+      <button class="bank-btn active" onclick="toggleBank(this)">BCA</button>
+      <button class="bank-btn" onclick="toggleBank(this)">Mandiri</button>
+      <button class="bank-btn" onclick="toggleBank(this)">BNI</button>
+      <button class="bank-btn" onclick="toggleBank(this)">BRI</button>
+    </div>
+    <div class="va-box">
+      <div class="va-label">Nomor Virtual Account</div>
+      <div class="va-num">8277 - 0012 - 3456 - 789</div>
+      <small>Berlaku 24 jam · Transfer jumlah yang sama persis</small>
+    </div>
+    <div class="info-grid">
+      <div><label>Nama Pemegang Rekening</label><input type="text" id="holderName" placeholder="Nama kamu" class="pay-input"></div>
+      <div><label>Cabang Bank</label><input type="text" placeholder="e.g. Jakarta Pusat" class="pay-input"></div>
+    </div>
+    <div class="total-row">
+      <div><span>Total Pembayaran</span><br><strong id="tot1">Rp 0</strong></div>
+      <button class="btn-paynow" id="payBtn1" onclick="doPay('Bank Transfer')">Bayar Sekarang →</button>
+    </div>
+  </div>
+
+  <!-- E-Wallet -->
+  <div class="pay-panel" id="panel-ewallet">
+    <h3>Pilih E-Wallet</h3>
+    <div class="bank-opts">
+      <button class="bank-btn active" onclick="toggleBank(this)">GoPay</button>
+      <button class="bank-btn" onclick="toggleBank(this)">OVO</button>
+      <button class="bank-btn" onclick="toggleBank(this)">DANA</button>
+      <button class="bank-btn" onclick="toggleBank(this)">ShopeePay</button>
+    </div>
+    <div class="va-box">
+      <div class="va-label">Nomor HP Terdaftar</div>
+      <div class="va-num">0812 - 346 - 7890</div>
+      <small>Kamu akan diarahkan ke aplikasi untuk konfirmasi pembayaran.</small>
+    </div>
+    <div class="total-row">
+      <div><span>Total Pembayaran</span><br><strong id="tot2">Rp 0</strong></div>
+      <button class="btn-paynow" onclick="doPay('E-Wallet')">Bayar Sekarang →</button>
+    </div>
+  </div>
+
+  <!-- Minimarket -->
+  <div class="pay-panel" id="panel-store">
+    <h3>Pilih Toko</h3>
+    <div class="bank-opts">
+      <button class="bank-btn active" onclick="toggleBank(this)">Indomaret</button>
+      <button class="bank-btn" onclick="toggleBank(this)">Alfamart</button>
+      <button class="bank-btn" onclick="toggleBank(this)">Lawson</button>
+    </div>
+    <div class="va-box">
+      <div class="va-label">Kode Pembayaran</div>
+      <div class="va-num">IDM - 8821 - 4403 - 9917</div>
+      <small>Berlaku 24 jam · Transfer jumlah yang sama persis</small>
+    </div>
+    <div class="store-steps">
+      <strong>Langkah di Kasir:</strong><br>
+      1. Kunjungi cabang Indomaret terdekat (buka 24 jam).<br>
+      2. Beritahu kasir kamu mau bayar online.<br>
+      3. Tunjukkan kode pembayaran ke kasir.<br>
+      4. Bayar sesuai jumlah dan simpan struknya.
+    </div>
+    <div class="total-row">
+      <div><span>Total Pembayaran</span><br><strong id="tot3">Rp 0</strong></div>
+      <button class="btn-paynow" onclick="doPay('Minimarket')">Konfirmasi →</button>
+    </div>
+  </div>
+
+  <!-- QR Code -->
+  <div class="pay-panel" id="panel-qr">
+    <div class="qr-box">
+      <div class="qr-icon">📱</div>
+      <strong>SCAN TO PAY</strong><br>
+      <small>Gunakan e-wallet atau banking app untuk scan QR dan bayar langsung.</small>
+      <div class="qr-sub">GoPay · OVO · DANA · ShopeePay · BCA · +40 aplikasi lainnya</div>
+    </div>
+    <div class="qr-how">
+      <strong>CARA SCAN:</strong>
+      <ul>
+        <li>Buka e-wallet atau banking app kamu</li>
+        <li>Tap "SCAN QR" atau "BAYAR DENGAN QR"</li>
+        <li>Arahkan kamera ke QR code di atas</li>
+        <li>Verifikasi jumlah lalu masukkan PIN</li>
+      </ul>
+    </div>
+    <div class="total-row">
+      <div><span>Total Pembayaran</span><br><strong id="tot4">Rp 0</strong></div>
+      <button class="btn-paynow" onclick="doPay('QR Code')">Konfirmasi Bayar →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-bg" id="modal">
+  <div class="modal-card">
+    <div style="font-size:4rem">✅</div>
+    <h2>Pembayaran Berhasil!</h2>
+    <p>Pesananmu sudah dikonfirmasi.<br>Estimasi pengiriman: <strong>30–45 menit</strong>.</p>
+    <div class="order-id" id="orderId">Order ID: PP-XXXXXX</div>
+    <button class="btn-paynow" onclick="location.href='index.html'" style="width:100%">Kembali ke Beranda 🍔</button>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA3nz7zNvUbGHsveekg3RI9VK8KUlPggh4",
+    authDomain: "patty-party.firebaseapp.com",
+    projectId: "patty-party",
+    storageBucket: "patty-party.firebasestorage.app",
+    messagingSenderId: "418127733758",
+    appId: "1:418127733758:web:141cfc6e1ff976de3c16af"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  window._db = db;
+  window._collection = collection;
+  window._addDoc = addDoc;
+  window._serverTimestamp = serverTimestamp;
+  window._firebaseReady = true;
+  document.dispatchEvent(new Event('firebaseReady'));
+</script>
+
+<script src="shared.js"></script>
+<script>
+function showPanel(id, btn) {
+  document.querySelectorAll('.pay-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+function toggleBank(btn) {
+  btn.closest('.bank-opts').querySelectorAll('.bank-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function waitFirebase() {
+  return new Promise(resolve => {
+    if (window._firebaseReady) return resolve();
+    document.addEventListener('firebaseReady', resolve, { once: true });
+  });
+}
+
+async function doPay(method) {
+  const cart = getCart();
+  if (cart.length === 0) { showToast('⚠️ Keranjang kosong!'); return; }
+
+  const sub = cart.reduce((s,i) => s + i.price * i.qty, 0);
+  const total = sub + 10000;
+  const user = JSON.parse(localStorage.getItem('ppUserData') || '{}');
+  const orderId = 'PP-' + Date.now().toString().slice(-6);
+
+  // Disable semua tombol bayar
+  document.querySelectorAll('.btn-paynow').forEach(b => { b.disabled = true; b.textContent = 'Memproses...'; });
+
+  try {
+    await waitFirebase();
+
+    // Simpan order ke Firestore
+    await window._addDoc(window._collection(window._db, 'orders'), {
+      orderId,
+      items: cart.map(i => ({ name: i.name, price: i.price, qty: i.qty })),
+      subtotal: sub,
+      deliveryFee: 10000,
+      total,
+      paymentMethod: method,
+      customer: {
+        name: user.name || 'Guest',
+        email: user.email || '',
+        phone: user.phone || ''
+      },
+      status: 'paid',
+      orderedAt: window._serverTimestamp ? window._serverTimestamp() : new Date().toISOString()
+    });
+
+    console.log('✅ Order saved to Firestore:', orderId);
+  } catch (err) {
+    console.error('Firestore error (order still processed):', err);
+    // Tetap lanjut meski gagal simpan ke Firestore
+  }
+
+  // Kosongkan cart & tampilkan sukses
+  localStorage.removeItem('ppCart');
+  updateCartBadge();
+  document.getElementById('orderId').textContent = 'Order ID: ' + orderId;
+  document.getElementById('modal').classList.add('show');
+}
+
+function loadTotal() {
+  const cart = getCart();
+  const sub = cart.reduce((s,i) => s + i.price * i.qty, 0);
+  const total = sub + 10000;
+  const fmt = n => 'Rp ' + n.toLocaleString('id-ID');
+
+  ['tot1','tot2','tot3','tot4'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = fmt(total);
+  });
+
+  const miniItems = document.getElementById('miniItems');
+  if (miniItems) {
+    miniItems.innerHTML = cart.length
+      ? cart.map(i => `<div class="order-mini-item"><span>${i.name} x${i.qty}</span><span>Rp ${(i.price*i.qty).toLocaleString('id-ID')}</span></div>`).join('')
+      : '<div style="font-size:0.8rem;color:var(--gray)">Keranjang kosong — <a href="menu.html">Pesan dulu!</a></div>';
+  }
+  const miniSub = document.getElementById('miniSub');
+  const miniTotal = document.getElementById('miniTotal');
+  if (miniSub) miniSub.textContent = fmt(sub);
+  if (miniTotal) miniTotal.textContent = fmt(total);
+}
+
+window.addEventListener('load', () => {
+  loadTotal();
+  const user = JSON.parse(localStorage.getItem('ppUserData') || '{}');
+  if (user.name) {
+    const el = document.getElementById('holderName');
+    if (el) el.value = user.name;
+  }
+});
+
+window.addEventListener('focus', loadTotal);
+</script>
+</body>
+</html>

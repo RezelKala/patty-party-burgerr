@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patty Party Burger – Menu</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.menu-wrap { padding: 2rem 5%; max-width: 1200px; margin: 0 auto; }
+.menu-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.menu-tab {
+  padding: 0.5rem 1.5rem; border: 2px solid var(--red);
+  background: white; color: var(--red); border-radius: 25px;
+  font-weight: 700; cursor: pointer; transition: 0.2s;
+  font-family: 'Nunito', sans-serif; font-size: 0.85rem;
+}
+.menu-tab.active, .menu-tab:hover { background: var(--red); color: white; }
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1.2rem; }
+.burger-card { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.empty-menu { text-align: center; padding: 3rem; color: var(--gray); font-size: 1rem; grid-column: 1/-1; }
+@media(max-width:480px){ .menu-grid { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a class="nav-logo" href="index.html">
+      <div class="logo-icon">🍔</div>
+      <div><div class="logo-small">Patty Party</div><div class="logo-main">Patty Party Burger</div></div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="menu.html" class="nav-link active">Menu</a></li>
+      <li><a href="build.html" class="nav-link">Build Your Own Burger</a></li>
+      <li><a href="cart.html" class="nav-link">My Cart <span class="cart-badge">0</span></a></li>
+      <li><a href="about.html" class="nav-link">About</a></li>
+      <li><a href="review.html" class="nav-link">Review</a></li>
+      <li><a href="signin.html" class="nav-link btn-signin">Sign In</a></li>
+      <li><a href="signin.html#register" class="nav-link btn-register">Register</a></li>
+    </ul>
+    <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero" style="background:var(--red)">
+  <h1>🍔 Our Menu</h1>
+  <p>Fresh, Flavourful, Fast</p>
+</div>
+
+<div class="menu-wrap">
+  <div class="menu-tabs">
+    <button class="menu-tab active" onclick="filterMenu('burger',this)">🍔 Burger</button>
+    <button class="menu-tab" onclick="filterMenu('sides',this)">🍟 Sides</button>
+    <button class="menu-tab" onclick="filterMenu('drinks',this)">🥤 Drinks</button>
+    <button class="menu-tab" onclick="filterMenu('dessert',this)">🍨 Dessert</button>
+  </div>
+  <div class="menu-grid" id="menuGrid">
+    <div class="empty-menu">⏳ Loading menu...</div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">🍔 Patty Party Burger</div>
+    <div class="footer-links"><a href="about.html">About Us</a><a href="menu.html">Menu</a><a href="contact.html">Contact</a></div>
+    <div class="footer-socials">
+      <a href="#" class="social-btn fb"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" class="social-btn ig"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="social-btn tw"><i class="fab fa-twitter"></i></a>
+    </div>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+let currentCat = 'burger';
+
+function filterMenu(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderMenu();
+}
+
+function renderMenu() {
+  const grid = document.getElementById('menuGrid');
+  const items = menuData[currentCat] || [];
+
+  if (!items.length) {
+    grid.innerHTML = '<div class="empty-menu">No items in this category.</div>';
+    return;
+  }
+
+  grid.innerHTML = items.map(item => `
+    <div class="burger-card" onclick="addToCart('${item.name.replace(/'/g,"\\'")}', ${item.price}, '${item.img}')">
+      <img src="${item.img}" alt="${item.name}" loading="lazy"
+           onerror="this.src='https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&q=80'">
+      <h4>${item.name}</h4>
+      <p>${item.desc}</p>
+      <div class="card-footer">
+        <span class="price">Rp ${item.price.toLocaleString('id-ID')}</span>
+        <button class="btn-add" onclick="event.stopPropagation();addToCart('${item.name.replace(/'/g,"\\'")}', ${item.price}, '${item.img}')">+ Add</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.addEventListener('load', renderMenu);
+</script>
+</body>
+</html>

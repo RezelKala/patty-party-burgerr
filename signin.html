@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patty Party Burger – Sign In</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.auth-bg {
+  background: var(--red);
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.auth-card {
+  background: var(--cream);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  text-align: center;
+}
+.auth-logo { font-size: 3rem; margin-bottom: 0.5rem; }
+.auth-brand { font-family: 'Playfair Display', serif; color: var(--red); font-size: 1.3rem; margin-bottom: 1.5rem; font-weight: 900; }
+.auth-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-radius: 8px; overflow: hidden; background: #e8d9b8; padding: 4px; }
+.auth-tab { flex: 1; padding: 0.6rem; border: none; background: transparent; font-weight: 700; cursor: pointer; border-radius: 6px; transition: 0.2s; font-family: 'Nunito', sans-serif; font-size: 0.95rem; }
+.auth-tab.active { background: var(--gold); color: white; }
+.input-group { display: flex; align-items: center; background: white; border-radius: 8px; padding: 0 1rem; margin-bottom: 1rem; border: 1px solid #e0d0b0; }
+.input-group i { color: var(--gray); margin-right: 0.5rem; font-size: 0.85rem; }
+.input-group input { flex: 1; border: none; outline: none; padding: 0.75rem 0; font-family: 'Nunito', sans-serif; font-size: 0.9rem; background: transparent; min-width: 0; }
+.phone-prefix { font-size: 0.85rem; color: var(--gray); font-weight: 700; white-space: nowrap; margin-right: 0.3rem; }
+.btn-auth { width: 100%; background: var(--gold); color: white; border: none; padding: 0.85rem; border-radius: 8px; font-weight: 800; font-size: 1rem; cursor: pointer; margin: 0.5rem 0; transition: 0.2s; font-family: 'Nunito', sans-serif; }
+.btn-auth:hover { background: #e09515; }
+.btn-auth:disabled { background: #ccc; cursor: not-allowed; }
+.btn-auth-outline { width: 100%; background: white; color: var(--gold); border: 2px solid var(--gold); padding: 0.75rem; border-radius: 8px; font-weight: 800; font-size: 0.9rem; cursor: pointer; margin: 0.5rem 0; transition: 0.2s; font-family: 'Nunito', sans-serif; }
+.btn-auth-outline:hover { background: var(--gold); color: white; }
+.auth-switch { font-size: 0.82rem; color: var(--gray); margin-top: 0.5rem; }
+.auth-switch a { color: var(--red); font-weight: 700; cursor: pointer; }
+.otp-step { display: none; }
+.otp-inputs { display: flex; gap: 0.4rem; justify-content: center; margin-bottom: 1rem; flex-wrap: nowrap; }
+.otp-box { width: 42px; height: 50px; border: 2px solid #e0d0b0; border-radius: 10px; text-align: center; font-size: 1.3rem; font-weight: 900; font-family: 'Nunito', sans-serif; outline: none; transition: 0.2s; }
+.otp-box:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(240,171,36,0.2); }
+.otp-timer { font-size: 0.8rem; color: var(--gray); margin-bottom: 1rem; }
+.otp-timer span { color: var(--red); font-weight: 700; }
+.step-indicator { display: flex; gap: 0.4rem; justify-content: center; margin-bottom: 1.5rem; }
+.step-dot { width: 8px; height: 8px; border-radius: 50%; background: #e0d0b0; transition: 0.3s; }
+.step-dot.active { background: var(--gold); width: 24px; border-radius: 4px; }
+.info-box { background: #fffbf0; border: 1px solid #e8d9b8; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.8rem; color: var(--gray); text-align: left; }
+.info-box i { color: var(--gold); margin-right: 0.4rem; }
+
+/* ===== RESPONSIVE MOBILE ===== */
+@media (max-width: 480px) {
+  .auth-card { padding: 1.5rem 1rem; }
+  .auth-brand { font-size: 1.1rem; }
+  .otp-box { width: 38px; height: 46px; font-size: 1.1rem; }
+  .otp-inputs { gap: 0.3rem; }
+  .btn-auth, .btn-auth-outline { font-size: 0.9rem; padding: 0.75rem; }
+}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a class="nav-logo" href="index.html">
+      <div class="logo-icon">🍔</div>
+      <div><div class="logo-small">Patty Party</div><div class="logo-main">Patty Party Burger</div></div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="menu.html" class="nav-link">Menu</a></li>
+      <li><a href="build.html" class="nav-link">Build Your Own Burger</a></li>
+      <li><a href="cart.html" class="nav-link">My Cart <span class="cart-badge">0</span></a></li>
+      <li><a href="about.html" class="nav-link">About</a></li>
+      <li><a href="review.html" class="nav-link">Review</a></li>
+      <li><a href="signin.html" class="nav-link btn-signin active">Sign In</a></li>
+    </ul>
+    <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="auth-bg">
+  <div class="auth-card">
+    <div class="auth-logo">🍔</div>
+    <h2 class="auth-brand">Patty Party Burger</h2>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="setTab('login')">Log In</button>
+      <button class="auth-tab" id="tab-register" onclick="setTab('register')">Sign Up</button>
+    </div>
+
+    <!-- ===== LOGIN FORM ===== -->
+    <div id="form-login">
+      <div id="login-step1">
+        <div class="step-indicator">
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+        </div>
+        <div class="input-group"><i class="fas fa-envelope"></i><input type="email" placeholder="Email" id="loginEmail"></div>
+        <div class="input-group"><i class="fas fa-lock"></i><input type="password" placeholder="Password" id="loginPass"></div>
+        <div class="input-group">
+          <span class="phone-prefix">+62</span>
+          <input type="tel" placeholder="Nomor WhatsApp (e.g. 81234567890)" id="loginPhone" maxlength="13">
+        </div>
+        <div class="info-box"><i class="fas fa-info-circle"></i>OTP verifikasi akan dikirim ke WhatsApp kamu</div>
+        <button class="btn-auth" onclick="sendLoginOTP()" id="btnSendLoginOTP">Kirim OTP ke WhatsApp 📲</button>
+      </div>
+
+      <div id="login-step2" class="otp-step">
+        <div class="step-indicator">
+          <div class="step-dot"></div>
+          <div class="step-dot active"></div>
+        </div>
+        <p style="font-size:0.85rem;color:var(--gray);margin-bottom:1rem">Masukkan 6 digit OTP yang dikirim ke WhatsApp <strong id="loginPhoneDisplay"></strong></p>
+        <div class="otp-inputs">
+          <input class="otp-box" maxlength="1" id="otp0" oninput="otpInput(this,1)" onkeydown="otpKey(this,event,-1)">
+          <input class="otp-box" maxlength="1" id="otp1" oninput="otpInput(this,2)" onkeydown="otpKey(this,event,0)">
+          <input class="otp-box" maxlength="1" id="otp2" oninput="otpInput(this,3)" onkeydown="otpKey(this,event,1)">
+          <input class="otp-box" maxlength="1" id="otp3" oninput="otpInput(this,4)" onkeydown="otpKey(this,event,2)">
+          <input class="otp-box" maxlength="1" id="otp4" oninput="otpInput(this,5)" onkeydown="otpKey(this,event,3)">
+          <input class="otp-box" maxlength="1" id="otp5" oninput="otpInput(this,-1)" onkeydown="otpKey(this,event,4)">
+        </div>
+        <div class="otp-timer">Berlaku selama <span id="loginTimer">120</span> detik</div>
+        <button class="btn-auth" onclick="verifyLoginOTP()">Verifikasi & Masuk ✅</button>
+        <button class="btn-auth-outline" onclick="backToLoginStep1()">← Ganti Nomor</button>
+      </div>
+    </div>
+
+    <!-- ===== REGISTER FORM ===== -->
+    <div id="form-register" style="display:none">
+      <div id="reg-step1">
+        <div class="step-indicator">
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+        </div>
+        <div class="input-group"><i class="fas fa-user"></i><input type="text" placeholder="Nama Lengkap" id="regName"></div>
+        <div class="input-group"><i class="fas fa-envelope"></i><input type="email" placeholder="Email" id="regEmail"></div>
+        <div class="input-group"><i class="fas fa-lock"></i><input type="password" placeholder="Password" id="regPass"></div>
+        <div class="input-group"><i class="fas fa-lock"></i><input type="password" placeholder="Konfirmasi Password" id="regPass2"></div>
+        <div class="input-group">
+          <span class="phone-prefix">+62</span>
+          <input type="tel" placeholder="Nomor WhatsApp (e.g. 81234567890)" id="regPhone" maxlength="13">
+        </div>
+        <div class="info-box"><i class="fas fa-info-circle"></i>OTP verifikasi akan dikirim ke WhatsApp kamu</div>
+        <button class="btn-auth" onclick="sendRegOTP()">Kirim OTP ke WhatsApp 📲</button>
+        <p class="auth-switch">Sudah punya akun? <a onclick="setTab('login')">Log In</a></p>
+      </div>
+
+      <div id="reg-step2" class="otp-step">
+        <div class="step-indicator">
+          <div class="step-dot"></div>
+          <div class="step-dot active"></div>
+        </div>
+        <p style="font-size:0.85rem;color:var(--gray);margin-bottom:1rem">OTP dikirim ke WhatsApp <strong id="regPhoneDisplay"></strong></p>
+        <div class="otp-inputs">
+          <input class="otp-box" maxlength="1" id="rotp0" oninput="otpInput(this,1,'r')" onkeydown="otpKey(this,event,-1,'r')">
+          <input class="otp-box" maxlength="1" id="rotp1" oninput="otpInput(this,2,'r')" onkeydown="otpKey(this,event,0,'r')">
+          <input class="otp-box" maxlength="1" id="rotp2" oninput="otpInput(this,3,'r')" onkeydown="otpKey(this,event,1,'r')">
+          <input class="otp-box" maxlength="1" id="rotp3" oninput="otpInput(this,4,'r')" onkeydown="otpKey(this,event,2,'r')">
+          <input class="otp-box" maxlength="1" id="rotp4" oninput="otpInput(this,5,'r')" onkeydown="otpKey(this,event,3,'r')">
+          <input class="otp-box" maxlength="1" id="rotp5" oninput="otpInput(this,-1,'r')" onkeydown="otpKey(this,event,4,'r')">
+        </div>
+        <div class="otp-timer">Berlaku selama <span id="regTimer">120</span> detik</div>
+        <button class="btn-auth" onclick="verifyRegOTP()">Verifikasi & Daftar ✅</button>
+        <button class="btn-auth-outline" onclick="backToRegStep1()">← Kembali</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">🍔 Patty Party Burger</div>
+    <div class="footer-links"><a href="about.html">About Us</a><a href="menu.html">Menu</a><a href="contact.html">Contact</a></div>
+    <div class="footer-socials">
+      <a href="#" class="social-btn fb"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" class="social-btn ig"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="social-btn tw"><i class="fab fa-twitter"></i></a>
+    </div>
+  </div>
+</footer>
+
+<!-- Firebase SDK (module) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA3nz7zNvUbGHsveekg3RI9VK8KUlPggh4",
+    authDomain: "patty-party.firebaseapp.com",
+    projectId: "patty-party",
+    storageBucket: "patty-party.firebasestorage.app",
+    messagingSenderId: "418127733758",
+    appId: "1:418127733758:web:141cfc6e1ff976de3c16af"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  window._db = db;
+  window._collection = collection;
+  window._addDoc = addDoc;
+  window._query = query;
+  window._where = where;
+  window._getDocs = getDocs;
+  window._serverTimestamp = serverTimestamp;
+
+  // Signal that Firebase is ready
+  window._firebaseReady = true;
+  document.dispatchEvent(new Event('firebaseReady'));
+</script>
+
+<!-- shared.js (non-module, load after Firebase module) -->
+<script src="shared.js"></script>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+const FONNTE_TOKEN = 'vC5nmYU5RLagzFKnai17'; // ← token Fonnte kamu
+
+// ============================================================
+// STATE — OTP disimpan di sini, TIDAK di-generate ulang
+// ============================================================
+let generatedOTP = '';        // satu tempat penyimpanan OTP
+let loginOTPTimer = null;
+let regOTPTimer = null;
+
+// ============================================================
+// HELPERS
+// ============================================================
+function setTab(tab) {
+  document.getElementById('form-login').style.display    = tab === 'login'    ? 'block' : 'none';
+  document.getElementById('form-register').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('tab-login').classList.toggle('active',    tab === 'login');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+}
+if (location.hash === '#register') setTab('register');
+
+function otpInput(el, nextIdx, prefix) {
+  prefix = prefix || '';
+  if (el.value && nextIdx >= 0 && nextIdx <= 5) {
+    const next = document.getElementById((prefix ? 'rotp' : 'otp') + nextIdx);
+    if (next) next.focus();
+  }
+}
+function otpKey(el, e, prevIdx, prefix) {
+  prefix = prefix || '';
+  if (e.key === 'Backspace' && !el.value && prevIdx >= 0) {
+    const prev = document.getElementById((prefix ? 'rotp' : 'otp') + prevIdx);
+    if (prev) { prev.focus(); prev.value = ''; }
+  }
+}
+
+function makeOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+function startTimer(elId, seconds, intervalRef) {
+  clearInterval(intervalRef);
+  let s = seconds;
+  const el = document.getElementById(elId);
+  if (el) el.textContent = s;
+  const ref = setInterval(() => {
+    s--;
+    if (el) el.textContent = s > 0 ? s : 'Expired';
+    if (s <= 0) clearInterval(ref);
+  }, 1000);
+  return ref;
+}
+
+async function sendFonnte(phone, otp) {
+  const target = '62' + phone;
+  const msg = `Patty Party Burger\n\nKode OTP kamu: ${otp}\n\nBerlaku 2 menit. Jangan berikan ke siapa pun!`;
+
+  console.log('Sending OTP to:', target, '| OTP:', otp);
+
+  try {
+    const formData = new FormData();
+    formData.append('target', target);
+    formData.append('message', msg);
+
+    const res = await fetch('https://api.fonnte.com/send', {
+      method: 'POST',
+      headers: { 'Authorization': FONNTE_TOKEN },
+      body: formData
+    });
+
+    const data = await res.json();
+    console.log('Fonnte response:', JSON.stringify(data));
+
+    if (data.status === true || data.status === 'true') {
+      return true;
+    } else {
+      // Fonnte kirim tapi status false — tampilkan OTP di layar sebagai fallback
+      console.warn('Fonnte status false, reason:', data.reason || data.message || 'unknown');
+      showOTPFallback(otp);
+      return true; // tetap lanjut ke step OTP
+    }
+  } catch (e) {
+    console.error('Fonnte error:', e);
+    // CORS / network error — tampilkan OTP di layar
+    showOTPFallback(otp);
+    return true; // tetap lanjut ke step OTP
+  }
+}
+
+function showOTPFallback(otp) {
+  // Tampilkan OTP di popup karena Fonnte tidak bisa diakses dari localhost
+  const box = document.createElement('div');
+  box.style.cssText = `
+    position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+    background:white; border:3px solid #f0ab24; border-radius:16px;
+    padding:2rem; text-align:center; z-index:9999; box-shadow:0 10px 40px rgba(0,0,0,0.3);
+    font-family:'Nunito',sans-serif; max-width:320px; width:90%;
+  `;
+  box.innerHTML = `
+    <div style="font-size:2rem;margin-bottom:0.5rem">📱</div>
+    <div style="font-weight:800;font-size:1.1rem;color:#8b1a1a;margin-bottom:0.5rem">OTP Kamu</div>
+    <div style="font-size:2.5rem;font-weight:900;letter-spacing:8px;color:#f0ab24;margin:1rem 0">${otp}</div>
+    <div style="font-size:0.8rem;color:#888;margin-bottom:1rem">
+      (WhatsApp tidak bisa dikirim dari localhost.<br>Di hosting sungguhan akan terkirim ke WA.)
+    </div>
+    <button onclick="this.parentElement.remove()" style="
+      background:#f0ab24;color:white;border:none;padding:0.6rem 2rem;
+      border-radius:8px;font-weight:800;cursor:pointer;font-size:1rem;
+    ">OK, Mengerti</button>
+  `;
+  document.body.appendChild(box);
+}
+
+// Tunggu Firebase siap sebelum query
+function waitFirebase() {
+  return new Promise(resolve => {
+    if (window._firebaseReady) return resolve();
+    document.addEventListener('firebaseReady', resolve, { once: true });
+  });
+}
+
+// ============================================================
+// LOGIN FLOW
+// ============================================================
+async function sendLoginOTP() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPass').value;
+  const phone = document.getElementById('loginPhone').value.trim().replace(/^0/, '');
+
+  if (!email) { showToast('⚠️ Masukkan email'); return; }
+  if (!pass)  { showToast('⚠️ Masukkan password'); return; }
+  if (!phone || phone.length < 8) { showToast('⚠️ Nomor WhatsApp tidak valid'); return; }
+
+  const btn = document.getElementById('btnSendLoginOTP');
+  btn.disabled = true;
+  btn.textContent = 'Mengirim OTP...';
+
+  try {
+    await waitFirebase();
+
+    // Cek user di Firestore
+    const q    = window._query(window._collection(window._db, 'users'), window._where('email', '==', email));
+    const snap = await window._getDocs(q);
+
+    if (snap.empty) {
+      showToast('❌ Email tidak ditemukan. Silakan Register dulu.');
+      btn.disabled = false; btn.textContent = 'Kirim OTP ke WhatsApp 📲';
+      return;
+    }
+
+    const userData = snap.docs[0].data();
+    if (userData.password !== btoa(pass)) {
+      showToast('❌ Password salah');
+      btn.disabled = false; btn.textContent = 'Kirim OTP ke WhatsApp 📲';
+      return;
+    }
+
+    // Generate OTP — simpan di variabel global
+    generatedOTP = makeOTP();
+    console.log('OTP generated (login):', generatedOTP); // untuk debug
+
+    const sent = await sendFonnte(phone, generatedOTP);
+
+    if (sent) {
+      window._tempLoginUser = userData;
+      document.getElementById('loginPhoneDisplay').textContent = '+62' + phone;
+      document.getElementById('login-step1').style.display = 'none';
+      document.getElementById('login-step2').style.display = 'block';
+      loginOTPTimer = startTimer('loginTimer', 120, loginOTPTimer);
+      showToast('📲 OTP dikirim ke WhatsApp!');
+    } else {
+      showToast('❌ Gagal kirim OTP. Coba lagi.');
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('❌ Error: ' + err.message);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Kirim OTP ke WhatsApp 📲';
+}
+
+function verifyLoginOTP() {
+  const entered = [0,1,2,3,4,5].map(i => document.getElementById('otp'+i).value).join('');
+  if (entered.length < 6) { showToast('⚠️ Masukkan 6 digit OTP'); return; }
+
+  console.log('OTP entered:', entered, '| Generated:', generatedOTP); // debug
+
+  if (entered === generatedOTP) {
+    const user = window._tempLoginUser;
+    localStorage.setItem('ppUserData', JSON.stringify({ name: user.name, email: user.email, phone: user.phone }));
+    localStorage.setItem('ppUser', user.email);
+    clearInterval(loginOTPTimer);
+    showToast('✅ Login berhasil! Selamat datang, ' + user.name + '!');
+    setTimeout(() => location.href = 'index.html', 1200);
+  } else {
+    showToast('❌ OTP salah! Coba lagi.');
+    [0,1,2,3,4,5].forEach(i => document.getElementById('otp'+i).value = '');
+    document.getElementById('otp0').focus();
+  }
+}
+
+function backToLoginStep1() {
+  document.getElementById('login-step1').style.display = 'block';
+  document.getElementById('login-step2').style.display = 'none';
+  clearInterval(loginOTPTimer);
+  generatedOTP = ''; // reset OTP
+}
+
+// ============================================================
+// REGISTER FLOW
+// ============================================================
+async function sendRegOTP() {
+  const name  = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass  = document.getElementById('regPass').value;
+  const pass2 = document.getElementById('regPass2').value;
+  const phone = document.getElementById('regPhone').value.trim().replace(/^0/, '');
+
+  if (!name)  { showToast('⚠️ Masukkan nama lengkap'); return; }
+  if (!email) { showToast('⚠️ Masukkan email'); return; }
+  if (!pass || pass.length < 6) { showToast('⚠️ Password minimal 6 karakter'); return; }
+  if (pass !== pass2) { showToast('⚠️ Password tidak cocok'); return; }
+  if (!phone || phone.length < 8) { showToast('⚠️ Nomor WhatsApp tidak valid'); return; }
+
+  try {
+    await waitFirebase();
+
+    const q    = window._query(window._collection(window._db, 'users'), window._where('email', '==', email));
+    const snap = await window._getDocs(q);
+    if (!snap.empty) { showToast('❌ Email sudah terdaftar!'); return; }
+  } catch (err) {
+    console.error(err);
+  }
+
+  // Generate OTP — simpan ke variabel global
+  generatedOTP = makeOTP();
+  console.log('OTP generated (register):', generatedOTP); // debug
+
+  window._tempRegData = { name, email, password: btoa(pass), phone, createdAt: new Date().toISOString() };
+
+  const sent = await sendFonnte(phone, generatedOTP);
+  if (sent) {
+    document.getElementById('regPhoneDisplay').textContent = '+62' + phone;
+    document.getElementById('reg-step1').style.display = 'none';
+    document.getElementById('reg-step2').style.display = 'block';
+    regOTPTimer = startTimer('regTimer', 120, regOTPTimer);
+    showToast('📲 OTP dikirim ke WhatsApp!');
+  } else {
+    showToast('❌ Gagal kirim OTP. Coba lagi.');
+    generatedOTP = ''; // reset kalau gagal
+  }
+}
+
+async function verifyRegOTP() {
+  const entered = [0,1,2,3,4,5].map(i => document.getElementById('rotp'+i).value).join('');
+  if (entered.length < 6) { showToast('⚠️ Masukkan 6 digit OTP'); return; }
+
+  console.log('OTP entered:', entered, '| Generated:', generatedOTP); // debug
+
+  if (entered === generatedOTP) {
+    try {
+      await waitFirebase();
+      await window._addDoc(window._collection(window._db, 'users'), {
+        ...window._tempRegData,
+        registeredAt: window._serverTimestamp ? window._serverTimestamp() : new Date().toISOString()
+      });
+
+      clearInterval(regOTPTimer);
+      generatedOTP = ''; // reset setelah sukses
+      showToast('✅ Akun berhasil dibuat! Silakan Login.');
+      setTimeout(() => {
+        setTab('login');
+        document.getElementById('reg-step2').style.display = 'none';
+        document.getElementById('reg-step1').style.display = 'block';
+      }, 1200);
+    } catch (err) {
+      showToast('❌ Gagal simpan data: ' + err.message);
+    }
+  } else {
+    showToast('❌ OTP salah! Coba lagi.');
+    [0,1,2,3,4,5].forEach(i => document.getElementById('rotp'+i).value = '');
+    document.getElementById('rotp0').focus();
+  }
+}
+
+function backToRegStep1() {
+  document.getElementById('reg-step1').style.display = 'block';
+  document.getElementById('reg-step2').style.display = 'none';
+  clearInterval(regOTPTimer);
+  generatedOTP = ''; // reset OTP
+}
+</script>
+</body>
+</html>

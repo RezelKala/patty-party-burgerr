@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patty Party Burger – Contact Us</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 2.5rem 5%; max-width: 1100px; margin: 0 auto; }
+.contact-info h2, .contact-form-box h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--red); margin-bottom: 1.2rem; }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.info-item { display: flex; gap: 0.8rem; align-items: flex-start; background: white; border-radius: 10px; padding: 1rem; box-shadow: var(--shadow); }
+.info-item i { color: var(--red); font-size: 1.2rem; margin-top: 0.1rem; flex-shrink: 0; }
+.info-item h4 { font-weight: 800; font-size: 0.85rem; margin-bottom: 0.2rem; }
+.info-item p { font-size: 0.78rem; color: var(--gray); line-height: 1.55; }
+.contact-form-box { background: white; border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+.contact-form-box .form-input { margin-bottom: 0.8rem; }
+.contact-form-box .form-textarea { margin-bottom: 0.8rem; }
+.btn-send { background: var(--red); color: white; border: none; padding: 0.75rem 2rem; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.9rem; transition: 0.2s; font-family: 'Nunito', sans-serif; }
+.btn-send:hover { background: var(--red-light); }
+.dark-features { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; padding: 2.5rem 5%; background: var(--dark); color: white; }
+.dark-features .feature { color: white; }
+.dark-features .feature p { color: rgba(255,255,255,0.65); }
+@media(max-width:768px){ .contact-wrap { grid-template-columns: 1fr; } .info-grid { grid-template-columns: 1fr; } .dark-features { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a class="nav-logo" href="index.html">
+      <div class="logo-icon">🍔</div>
+      <div><div class="logo-small">Patty Party</div><div class="logo-main">Patty Party Burger</div></div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="menu.html" class="nav-link">Menu</a></li>
+      <li><a href="build.html" class="nav-link">Build Your Own Burger</a></li>
+      <li><a href="cart.html" class="nav-link">My Cart <span class="cart-badge">0</span></a></li>
+      <li><a href="about.html" class="nav-link">About</a></li>
+      <li><a href="review.html" class="nav-link">Review</a></li>
+      <li><a href="signin.html" class="nav-link btn-signin">Sign In</a></li>
+      <li><a href="signin.html#register" class="nav-link btn-register">Register</a></li>
+    </ul>
+    <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero" style="background:var(--red)">
+  <h1>📞 Contact Us</h1>
+  <p>We're gladly to help you with anything!</p>
+</div>
+
+<div class="contact-wrap">
+  <div class="contact-info">
+    <h2>Contact Information</h2>
+    <div class="info-grid">
+      <div class="info-item">
+        <i class="fas fa-phone"></i>
+        <div><h4>Phone</h4><p>+62 123-456-7890</p></div>
+      </div>
+      <div class="info-item">
+        <i class="fas fa-envelope"></i>
+        <div><h4>Email</h4><p>support@pattypartyburger.com</p></div>
+      </div>
+      <div class="info-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <div><h4>Address</h4><p>Prominence Tower Alam Sutera</p><br>Jl. Jalur Sutera Bar. Alam No.15, RT.003/RW.006, Panunggangan Tim., Sutera, Kota Tangerang, Banten 15143, Indonesia</p></div>
+      </div>
+      <div class="info-item">
+        <i class="fas fa-clock"></i>
+        <div><h4>Opening Hours</h4><p>Monday–Sunday<br>10:00 AM – 11:00 PM</p></div>
+      </div>
+    </div>
+    <!-- Map placeholder -->
+    <div style="margin-top:1.5rem;background:white;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);height:200px;display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--gray);">
+      🗺️ <span style="font-size:0.9rem;margin-left:0.5rem;font-family:'Nunito',sans-serif;color:var(--gray)">Map Placeholder</span>
+    </div>
+  </div>
+
+  <div class="contact-form-box">
+    <h2>Send a Message</h2>
+    <input type="text" placeholder="Your Name" class="form-input" id="cName">
+    <input type="email" placeholder="Your Email" class="form-input" id="cEmail">
+    <input type="text" placeholder="Subject" class="form-input" id="cSubject">
+    <textarea class="form-textarea" placeholder="Your Message" rows="5" id="cMsg"></textarea>
+    <button class="btn-send" onclick="sendMsg()">Send Message 📨</button>
+  </div>
+</div>
+
+<div class="dark-features">
+  <div class="feature"><div class="feat-icon">🚚</div><h4>Fast Delivery</h4><p>Your order hot & fresh at your door</p></div>
+  <div class="feature"><div class="feat-icon">✅</div><h4>Premium Quality</h4><p>Only the finest ingredients used</p></div>
+  <div class="feature"><div class="feat-icon">🏷️</div><h4>Best Prices</h4><p>Great taste at affordable prices</p></div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">🍔 Patty Party Burger</div>
+    <div class="footer-links"><a href="about.html">About Us</a><a href="menu.html">Menu</a><a href="contact.html">Contact</a></div>
+    <div class="footer-socials">
+      <a href="#" class="social-btn fb"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" class="social-btn ig"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="social-btn tw"><i class="fab fa-twitter"></i></a>
+    </div>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+function sendMsg() {
+  const name = document.getElementById('cName').value.trim();
+  const msg = document.getElementById('cMsg').value.trim();
+  if (!name || !msg) { showToast('⚠️ Please fill in all fields'); return; }
+  showToast('✅ Message sent! We will reply within 24 hours.');
+  document.getElementById('cName').value = '';
+  document.getElementById('cEmail').value = '';
+  document.getElementById('cSubject').value = '';
+  document.getElementById('cMsg').value = '';
+}
+</script>
+</body>
+</html>
